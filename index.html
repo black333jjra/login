@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dibujo con el Dedo (IA)</title>
+<style>
+  body, html {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+  }
+  video, canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  #draw {
+    pointer-events: none;
+  }
+</style>
+<script type="module">
+  import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
+
+  const video = document.createElement("video");
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  document.body.append(video, canvas);
+
+  async function init() {
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    );
+    const handLandmarker = await HandLandmarker.createFromOptions(vision, {
+      baseOptions: { modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task` },
+      numHands: 1,
+    });
+
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    video.srcObject = stream;
+    await video.play();
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    let lastX, lastY;
+    function drawFrame() {
+      handLandmarker.detectForVideo(video, performance.now(), result => {
+        ctx.fillStyle = "rgba(0,0,0,0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        if (result.landmarks.length > 0) {
+          const finger = result.landmarks[0][8]; // dedo índice
+          const x = finger.x * canvas.width;
+          const y = finger.y * canvas.height;
+
+          ctx.strokeStyle = "red";
+          ctx.lineWidth = 4;
+          ctx.lineCap = "round";
+          if (lastX && lastY) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+          }
+          lastX = x;
+          lastY = y;
+        } else {
+          lastX = lastY = null;
+        }
+      });
+      requestAnimationFrame(drawFrame);
+    }
+
+    drawFrame();
+  }
+
+  init();
+</script>
+</head>
+<body></body>
+</html>
