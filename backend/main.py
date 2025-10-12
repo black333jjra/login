@@ -1,0 +1,71 @@
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
+from fastapi.middleware.cors import CORSMiddleware
+
+# --- CONFIGURACIÓN ---
+ALGORITHM = "HS256"
+ACCESS_TOKEN_DURATION = 30  # minutos
+SECRET = "0993f4702e1ebc8d28dd0472a4d6ba44addf418ec002aa43c26c722cb6218247"
+
+app = FastAPI()
+
+# Permitir peticiones desde el frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Podés restringirlo a ["http://127.0.0.1:5500"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+oauth2 = OAuth2PasswordBearer(tokenUrl="login")
+crypt = CryptContext(schemes=["bcrypt"])
+
+# --- BASE DE DATOS SIMULADA ---
+users_db = {
+    "joel": {
+        "username": "joel",
+        "full_name": "Joel Reyes",
+        "email": "joel@gmail.com",
+        "disabled": False,
+        "password": crypt.hash("1234")  # 🔐 Contraseña: 1234
+    }
+}
+
+# --- LOGIN ---
+@app.post("/login")
+async def login(form: OAuth2PasswordRequestForm = Depends()):
+    user_db = users_db.get(form.username)
+    if not user_db:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Usuario incorrecto")
+
+    if not crypt.verify(form.password, user_db["password"]):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Contraseña incorrecta")
+
+    token_data = {
+        "sub": user_db["username"],
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_DURATION)
+    }
+
+    token_jwt = jwt.encode(token_data, SECRET, algorithm=ALGORITHM)
+    return {"access_token": token_jwt, "token_type": "bearer"}
+
+# --- RUTA PROTEGIDA ---
+def get_current_user(token: str = Depends(oauth2)):
+    try:
+        payload = jwt.decode(token, SECRET, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token inválido")
+        return users_db[username]
+    except JWTError:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token inválido o expirado")
+
+@app.get("/users/me")
+async def read_users_me(user: dict = Depends(get_current_user)):
+    return {"usuario": user["full_name"], "email": user["email"]}
+
+#  python -m uvicorn backend.main:app --reload
