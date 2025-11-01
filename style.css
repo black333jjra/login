@@ -1,0 +1,164 @@
+/* ---------------------------
+   Variables de tema (colores)
+   --------------------------- */
+:root {
+  --bg: #010101;           /* fondo por defecto (modo oscuro) */
+  --text: #ffffff;         /* texto por defecto */
+  --muted: rgba(255,255,255,0.7);
+  --header-bg: rgba(255,255,255,0.04); /* transparencia del header sobre fondo oscuro */
+  --link-border: #fff;
+}
+
+/* Clase para modo claro: cambia variables */
+body.light-mode {
+  --bg: #f7f7f7;
+  --text: #0b0b0b;
+  --muted: rgba(0,0,0,0.6);
+  --header-bg: rgba(255,255,255,0.6); /* header más claro en modo claro */
+  --link-border: #0b0b0b;
+}
+
+/* ---------------------------
+   Reset y base
+   --------------------------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  font-family: monospace;
+  background: var(--bg);
+  color: var(--text);
+  cursor: none; /* tu cursor personalizado */
+  display: flex;
+  min-height: 100vh;
+  line-height: 1.4;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* Texto global */
+body h1, body p, body a { color: var(--text); }
+
+/* ---------------------------
+   HEADER - transparente y fijo
+   --------------------------- */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 900;
+  /* fondo semi-transparente + blur */
+  background: var(--header-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Contenedor interno con ancho máximo y control de layout */
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* left - nav - right */
+  padding: 12px 20px;
+}
+
+/* Left slot (puedes poner logo) */
+.header-left { width: 120px; }
+
+/* Nav centrado visualmente: hacemos que el ul sea inline-flex */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  gap: 24px;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text);
+  padding: 6px 4px;
+  border-bottom: 2px solid transparent;
+  transition: border-color .2s ease, transform .15s ease;
+  cursor: none;
+}
+
+nav a:hover {
+  border-bottom-color: var(--link-border);
+  transform: translateY(-2px);
+}
+
+/* Header right - el botón */
+.header-right { width: 120px; display:flex; justify-content: flex-end; }
+
+.dark-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: none;
+  color: var(--text);
+  padding: 6px;
+}
+
+/* ---------------------------
+   Ajuste para que el contenido no quede debajo del header
+   --------------------------- */
+/* IMPORTANTE: iguala este padding a la altura del header (aprox 56px) */
+.left, .right {
+  padding-top: 72px; /* espacio para el header fijo */
+}
+
+/* ---------------------------
+   Cursor (tu CSS original con pequeños ajustes)
+   --------------------------- */
+.cursor { pointer-events: none; }
+
+.cursor__ball {
+  position: fixed;
+  top: 0;
+  left: 0;
+  mix-blend-mode: difference;
+  z-index: 1000;
+}
+
+.cursor__ball circle { fill: #f7f8fa; }
+
+/* ---------------------------
+   Columnas izquierda y derecha (tu estilo original)
+   --------------------------- */
+.left, .right {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Sección derecha con fondo blanco (ajustado con variables) */
+.right {
+  background: #fff;
+}
+
+.right a { border-bottom: 2px solid #000; }
+
+.right h1, .right p, .right a { color: #000; }
+
+/* Enlaces normales */
+body a { border-bottom: 2px solid var(--link-border); padding: 10px 0; margin-top: 25px; }
+
+/* Responsivo básico: header más compacto en pantallas pequeñas */
+@media (max-width: 600px) {
+  .header-container { padding: 10px 12px; }
+  nav ul { gap: 14px; }
+  .header-left, .header-right { width: 60px; }
+}
