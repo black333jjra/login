@@ -1,0 +1,196 @@
+/* ---------------------------
+   Variables de tema (colores)
+   --------------------------- */
+:root {
+  --bg: #252525;           /* fondo por defecto (modo oscuro) */
+  --text: #ffffff;         /* texto por defecto */
+  --muted: rgba(25,25,25,0.7);
+  --header-bg: rgba(255,255,255,0.04); /* transparencia del header sobre fondo oscuro */
+  --link-border: #fff;
+}
+
+/* Clase para modo claro: cambia variables */
+body.light-mode {
+  --bg: #fffff4;
+  --text: #252525;
+  --muted: rgba(0,0,0,0.6);
+  --header-bg: rgba(255,255,255,0.2); /* header más claro en modo claro */
+  --link-border: #252525;
+}
+
+/* ---------------------------
+   Reset y base
+   --------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  font-family: monospace;
+  background: var(--bg);
+  height: 150dvh;
+  scroll-timeline: --body inline;
+  color: var(--text);
+  line-height: 1.4;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* Texto global */
+body h1, body p, body a { color: var(--text); }
+
+/* ---------------------------
+   HEADER - transparente y fijo
+   --------------------------- */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 900;
+  /* fondo semi-transparente + blur */
+  background: var(--header-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Contenedor interno con ancho máximo y control de layout */
+.header-container {
+  max-width: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* left - nav - right */
+  padding: 12px 20px;
+}
+
+/* Left slot (puedes poner logo) */
+.header-left { width: 120px; }
+
+/* Nav centrado visualmente: hacemos que el ul sea inline-flex */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  gap: 24px;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text);
+  padding: 6px 4px;
+  border-bottom: 2px solid var(--text);
+  transition: border-color .2s ease, transform .15s ease;
+}
+
+nav a:hover {
+  border-bottom-color: var(--link-border);
+  transform: translateY(-2px);
+}
+
+/* Header right - el botón */
+.header-right { width: 120px; display:flex; justify-content: flex-end; }
+
+.dark-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text);
+  padding: 0 0 0 10px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  margin: 10%;
+}
+
+.hero {
+  padding-top: 20px;
+  text-align: center;
+}
+
+/* Carrusel infinito */
+.carrusel-infinito {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  max-width: 100dvw;
+}
+
+.carousel {
+  margin: 0 auto;
+  width: 80%;
+  display: flex;
+  overflow-x: auto;
+}
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.group{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  animation: spin 20s infinite linear;
+  padding-right: 1em;
+}
+
+.card {
+  flex: 0 0 6em;
+  height: 6em;
+  padding: 1em;
+  align-content: center;
+}
+
+img {
+  filter: grayscale();
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes spin {
+  from {translate: 0;}
+  to {translate: -100%;}
+}
+
+.box-container {
+  display: flex;
+  width: 100dvw;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+}
+.box {
+  width: 10%;
+  background-color: #333;
+  animation: mover both;
+  animation-timeline: scroll();
+}
+
+@keyframes mover {
+  from {
+    font-size: 0;
+    opacity: 0;
+    height: 0;
+    width: 0%;
+  }
+  to {
+    font-size: 1em;
+    opacity: 1;
+    height: 300px;
+    width: 100%;
+  }
+}
+#sobre-mi {
+  margin: 100px 0;
+}

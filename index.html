@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi página</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- HEADER: transparente, fijo y con nav centrado -->
+    <header>
+      <div class="header-container">
+        <div class="header-left"></div>
+
+        <nav>
+          <ul>
+            <li>
+              <a class="nav-link hoverable" href="#proyectos">Proyectos</a>
+            </li>
+            <li>
+              <a class="nav-link hoverable" href="#habilidades">Habilidades</a>
+            </li>
+            <li><a class="nav-link hoverable" href="#contacto">Contacto</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-right">
+          <button
+            id="darkModeBtn"
+            class="dark-btn hoverable"
+            aria-pressed="false"
+            title="Cambiar modo"
+          >
+          🌙   
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <main class="container">
+      <section class="hero">
+        <h1>Desarrollo Web Profesional</h1>
+        <p>
+          Creo sitios web rápidos, responsivos y optimizados para móviles.
+          Especializado en HTML, CSS, JavaScript y diseño mobile-first.
+        </p>
+      </section>
+      <!-- CARRUSEL -->
+      <section class="carrusel-infinito">
+        <div class="carousel">
+          <div class="group">
+            <div class="card"><img src="carrousel/css.png" /></div>
+            <div class="card"><img src="carrousel/docker.png" /></div>
+            <div class="card"><img src="carrousel/html.png" /></div>
+            <div class="card"><img src="carrousel/js.png" /></div>
+            <div class="card"><img src="carrousel/py.png" /></div>
+            <div class="card"><img src="carrousel/sql.png" /></div>
+          </div>
+          <div aria-hidden class="group">
+            <div class="card"><img src="carrousel/css.png" /></div>
+            <div class="card"><img src="carrousel/docker.png" /></div>
+            <div class="card"><img src="carrousel/html.png" /></div>
+            <div class="card"><img src="carrousel/js.png" /></div>
+            <div class="card"><img src="carrousel/py.png" /></div>
+            <div class="card"><img src="carrousel/sql.png" /></div>
+          </div>
+        </div>
+      </section>
+      <!-- SOBRE MÍ -->
+      <section id="sobre-mi">
+        <h2>Sobre mí</h2>
+        <p>
+          Soy desarrollador web freelance enfocado en construir experiencias
+          rápidas y eficientes usando estándares modernos.
+        </p>
+      </section>
+      <!-- CONTACTO -->
+      <section id="contacto">
+        <h2>Contacto</h2>
+        <p>Envíame un mensaje para comenzar tu proyecto.</p>
+        <p>Email: <a href="mailto:contacto@joel.dev">contacto@joel.dev</a></p>
+      </section>
+    </main>
+    <div class="box-container">
+      <div class="box">
+        <h2>TECNOLOGIAS UTILIZADAS</h2>
+        <p>python, html, css, javasript, docker, fastapi</p>
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <footer class="container">© 2025 Joel — Desarrollador web freelance</footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script src="theme.js"></script>
+  </body>
+</html>
